@@ -7,7 +7,7 @@ import './App.css';
 function App() {
     const [activities, setActivities] = useState([]);
     useEffect(() => {
-        axios.get('http://localhost:5000/api/Activities').then(res => {
+        axios.get('http://localhost:5000/api/activities').then(res => {
             setActivities(res.data);
         });
     }, []);
