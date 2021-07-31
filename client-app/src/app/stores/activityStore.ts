@@ -1,6 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Activity } from '../models/activity';
-import { v4 as uuid } from 'uuid';
 
 import agent from '../api/agent';
 
@@ -27,9 +26,7 @@ export default class ActivityStore {
         try {
             const activities = await agent.Activities.list();
             activities.forEach((activity): void => {
-                activity.date = activity.date.split('T')[0];
-
-                this.activityRegistry.set(activity.id, activity);
+                this.setActivity(activity);
             });
         }
         catch (error) {
@@ -44,27 +41,34 @@ export default class ActivityStore {
         this.loadingInitial = state;
     };
 
-    selectActivity = (id: string): void => {
-        this.selectedActivity = this.activityRegistry.get(id);
-    };
+    loadActivity = async (id: string): Promise<Activity | undefined> => {
+        let activity = this.getActivity(id);
+        if (activity) {
+            this.selectedActivity = activity;
+            return activity;
+        }
+        else {
+            this.loadingInitial = true;
+            try {
+                activity = await agent.Activities.details(id);
+                this.setActivity(activity);
 
-    cancelSelectedActivity = (): void => {
-        this.selectedActivity = undefined;
+                runInAction((): void => {
+                    this.selectedActivity = activity;
+                });
 
-    };
-
-    openForm = (id?: string): void => {
-        id ? this.selectActivity(id) : this.cancelSelectedActivity();
-        this.editMode = true;
-    };
-
-    closeForm = (): void => {
-        this.editMode = false;
+                this.setLoadingInitial(false);
+                return activity;
+            }
+            catch (error) {
+                console.error(error);
+                this.setLoadingInitial(false);
+            }
+        }
     };
 
     createActivity = async (activity: Activity): Promise<void> => {
         this.loading = true;
-        activity.id = uuid();
         try {
             await agent.Activities.create(activity);
             runInAction((): void => {
@@ -117,5 +121,14 @@ export default class ActivityStore {
                 this.loading = false;
             });
         }
+    };
+
+    private getActivity = (id: string): Activity | undefined => {
+        return this.activityRegistry.get(id);
+    };
+
+    private setActivity = (activity: Activity): void => {
+        activity.date = activity.date.split('T')[0];
+        this.activityRegistry.set(activity.id, activity);
     };
 }
