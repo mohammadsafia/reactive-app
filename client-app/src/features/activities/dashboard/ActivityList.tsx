@@ -1,26 +1,25 @@
 import React, { SyntheticEvent, useState } from 'react';
-import { Activity } from '../../../app/models/activity';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
+import { useStore } from '../../../app/stores/store';
+import { observer } from 'mobx-react-lite';
 
 interface Props {
-    activities: Activity[];
-    submitting: boolean;
-    selectActivity(id: string): void;
-    deleteActivity(id: string): void;
+
 }
 
-const ActivityList: React.FC<Props> = ({ activities, selectActivity, deleteActivity, submitting }): JSX.Element => {
+const ActivityList: React.FC<Props> = (): JSX.Element => {
     const [target, setTarget] = useState('');
+    const { activityStore } = useStore();
 
-    function handleActivityDelete(event: SyntheticEvent<HTMLButtonElement>, id: string): void {
+    async function handleActivityDelete(event: SyntheticEvent<HTMLButtonElement>, id: string): Promise<void> {
         setTarget(event.currentTarget.name);
-        deleteActivity(id);
+        await activityStore.deleteActivity(id);
     }
 
     return (
         <Segment>
             <Item.Group divided>
-                { activities.map((activity): JSX.Element => (
+                { activityStore.activitiesByDate.map((activity): JSX.Element => (
                     <Item key={ activity.id }>
                         <Item.Content>
                             <Item.Header as="a">{ activity.title }</Item.Header>
@@ -30,10 +29,10 @@ const ActivityList: React.FC<Props> = ({ activities, selectActivity, deleteActiv
                                 <div>{ activity.city } ,{ activity.venue }</div>
                             </Item.Description>
                             <Item.Extra>
-                                <Button onClick={ (): void => selectActivity(activity.id) } floated="right" content="View" color="blue" />
+                                <Button onClick={ (): void => activityStore.selectActivity(activity.id) } floated="right" content="View" color="blue" />
                                 <Button
-                                    name={ activity.id } loading={ submitting && target === activity.id }
-                                    onClick={ (e): void => handleActivityDelete(e, activity.id) }
+                                    name={ activity.id } loading={ activityStore.loading && target === activity.id }
+                                    onClick={ (e): any => handleActivityDelete(e, activity.id) }
                                     floated="right" content="Delete" color="red" />
                                 <Label basic content={ activity.category } />
                             </Item.Extra>
@@ -45,4 +44,4 @@ const ActivityList: React.FC<Props> = ({ activities, selectActivity, deleteActiv
     );
 };
 
-export default ActivityList;
+export default observer(ActivityList);
