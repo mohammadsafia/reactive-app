@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Header, Image, Item, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/activity';
-import { observer } from 'mobx-react-lite';
+import {Button, Header, Image, Item, Segment} from 'semantic-ui-react';
+import {Activity} from 'app/models/activity';
+import {observer} from 'mobx-react-lite';
 
 const activityImageStyle = {
     filter: 'brightness(30%)',
@@ -20,21 +20,21 @@ interface Props {
     activity: Activity;
 }
 
-const ActivityDetailedHeader: React.FC<Props> = ({ activity }): JSX.Element => {
+const ActivityDetailedHeader: React.FC<Props> = ({activity}): JSX.Element => {
     return (
         <Segment.Group>
-            <Segment basic attached="top" style={ { padding: '0' } }>
-                <Image src={ `/assets/categoryImages/${ activity.category }.jpg` } fluid style={ activityImageStyle } />
-                <Segment style={ activityImageTextStyle } basic>
+            <Segment basic attached="top" style={{padding: '0'}}>
+                <Image src={`/assets/categoryImages/${activity.category}.jpg`} fluid style={activityImageStyle}/>
+                <Segment style={activityImageTextStyle} basic>
                     <Item.Group>
                         <Item>
                             <Item.Content>
                                 <Header
                                     size="huge"
-                                    content={ activity.title }
-                                    style={ { color: 'white' } }
+                                    content={activity.title}
+                                    style={{color: 'white'}}
                                 />
-                                <p>{ activity.date }</p>
+                                <p>{activity.date}</p>
                                 <p>
                                     Hosted by <strong>Bob</strong>
                                 </p>

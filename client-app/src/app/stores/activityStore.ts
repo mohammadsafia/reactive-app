@@ -1,5 +1,5 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { Activity } from '../models/activity';
+import {makeAutoObservable, runInAction} from 'mobx';
+import {Activity} from '../models/activity';
 
 import agent from '../api/agent';
 
@@ -37,11 +37,9 @@ export default class ActivityStore {
             activities.forEach((activity): void => {
                 this.setActivity(activity);
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
-        }
-        finally {
+        } finally {
             this.setLoadingInitial(false);
         }
     };
@@ -55,8 +53,7 @@ export default class ActivityStore {
         if (activity) {
             this.selectedActivity = activity;
             return activity;
-        }
-        else {
+        } else {
             this.loadingInitial = true;
             try {
                 activity = await agent.Activities.details(id);
@@ -68,8 +65,7 @@ export default class ActivityStore {
 
                 this.setLoadingInitial(false);
                 return activity;
-            }
-            catch (error) {
+            } catch (error) {
                 console.error(error);
                 this.setLoadingInitial(false);
             }
@@ -86,8 +82,7 @@ export default class ActivityStore {
                 this.editMode = false;
                 this.loading = false;
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
             runInAction((): void => {
                 this.loading = false;
@@ -106,8 +101,7 @@ export default class ActivityStore {
                 this.editMode = false;
                 this.loading = false;
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
             runInAction((): void => {
                 this.loading = false;
@@ -123,8 +117,7 @@ export default class ActivityStore {
                 this.activityRegistry.delete(id);
                 this.loading = false;
             });
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
             runInAction((): void => {
                 this.loading = false;

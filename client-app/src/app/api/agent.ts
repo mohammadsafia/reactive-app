@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
-import { Activity } from '../models/activity';
+import axios, {AxiosResponse} from 'axios';
+import {Activity} from '../models/activity';
 
 const sleep = (delay: number): Promise<unknown> => {
     return new Promise((resolve): void => {
@@ -13,8 +13,7 @@ axios.interceptors.response.use(async (response): Promise<AxiosResponse<any>> =>
     try {
         await sleep(1000);
         return response;
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         return Promise.reject(error);
     }
@@ -31,10 +30,10 @@ const requests = {
 
 const Activities = {
     list: (): Promise<Activity[]> => requests.get<Activity[]>('/activities'),
-    details: (id: string): Promise<Activity> => requests.get<Activity>(`/activities/${ id }`),
+    details: (id: string): Promise<Activity> => requests.get<Activity>(`/activities/${id}`),
     create: (activity: Activity): Promise<void> => requests.post<void>('/activities', activity),
-    update: (activity: Activity): Promise<void> => requests.put<void>(`/activities/${ activity.id }`, activity),
-    delete: (id: string): Promise<void> => requests.delete<void>(`/activities/${ id }`),
+    update: (activity: Activity): Promise<void> => requests.put<void>(`/activities/${activity.id}`, activity),
+    delete: (id: string): Promise<void> => requests.delete<void>(`/activities/${id}`),
 };
 
 const agent = {
