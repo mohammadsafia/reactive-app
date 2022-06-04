@@ -18,7 +18,7 @@ const badRequestHandler = (config: AxiosRequestConfig, data: any) => {
     if (typeof data === 'string') {
         toast.error(data)
     }
-    
+
     if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
         history.push('/not-found')
     }
@@ -58,7 +58,6 @@ axios.interceptors.response.use(async (response): Promise<AxiosResponse<any>> =>
     await sleep(1000);
     return response;
 }, (error: AxiosError) => {
-    const {data, status, config} = error.response!;
     errorHandler(error);
     return Promise.reject(error);
 });
