@@ -15,6 +15,7 @@ const NavBar: React.FC<Props> = (): JSX.Element => {
                     Reactivities
                 </Menu.Item>
                 <Menu.Item as={NavLink} to="/activities" name="Activities"/>
+                <Menu.Item as={NavLink} to="/errors" name="Errors"/>
                 <Menu.Item>
                     <Button as={NavLink} to="/createActivity" position="true" color="green" content="Create Activity"/>
                 </Menu.Item>
