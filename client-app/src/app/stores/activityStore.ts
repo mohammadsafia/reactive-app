@@ -19,7 +19,8 @@ export default class ActivityStore {
     }
 
     get activitiesByDate(): Activity[] {
-        return Array.from(this.activityRegistry.values()).sort((a, b): number => Date.parse(a.date) - Date.parse(b.date));
+        return Array.from(this.activityRegistry.values())
+            .sort((a, b): number => Date.parse(a.date) - Date.parse(b.date));
     }
 
     get groupedActivities(): [string, Activity[]][] {
